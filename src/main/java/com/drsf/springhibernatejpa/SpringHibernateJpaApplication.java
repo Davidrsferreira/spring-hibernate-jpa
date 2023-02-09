@@ -10,13 +10,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.drsf.springhibernatejpa.entity.Person;
-import com.drsf.springhibernatejpa.jdbc.PersonJDBC;
+import com.drsf.springhibernatejpa.jpa.JpaPersonRepository;
 
 @SpringBootApplication
 public class SpringHibernateJpaApplication implements CommandLineRunner {
 
 	@Autowired
-	private PersonJDBC jdbc;
+	private JpaPersonRepository repository;
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -26,11 +26,15 @@ public class SpringHibernateJpaApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		log.info("All users -> {}", jdbc.findAll());
-		log.info("find by id -> {}", jdbc.findById(10001));
-		log.info("delete by id -> {}", jdbc.deleteById(10001));
-		log.info("insert new person -> {}", jdbc.insert(new Person(10006, "Test new person", "location", new Date())));
-		log.info("update -> {}", jdbc.insert(new Person(10001, "DRSF", "Porto", new Date())));
+		log.info("insert new person -> {}", repository.save(new Person("David Ferreira", "LpCity", new Date())));
+		log.info("insert new person -> {}", repository.save(new Person("Paula Santos", "PGCity", new Date())));
+		log.info("All users -> {}", repository.findAll());
+		log.info("find by id -> {}", repository.findById(1));
+		log.info("update -> {}", repository.save(new Person(1, "DRSF", "Porto", new Date())));
+		log.info("find by id -> {}", repository.findById(1));
+		repository.deleteById(1);
+		log.info("delete by id -> {1}");
+		log.info("find by id -> {}", repository.findById(1));
 	}
 
 }
